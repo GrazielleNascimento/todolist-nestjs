@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { TarefaService } from '../service/tarefa.service';
 import { CreateTarefaDto } from '../dto/create-tarefa.dto';
 import { UpdateTarefaDto } from '../dto/update-tarefa.dto';
@@ -9,26 +19,48 @@ export class TarefaController {
 
   @Post()
   create(@Body() createTarefaDto: CreateTarefaDto) {
-    return this.tarefaService.create(createTarefaDto);
+    try {
+      return this.tarefaService.create(createTarefaDto);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get()
   findAll() {
-    return this.tarefaService.findAll();
+    try {
+      return this.tarefaService.findAll();
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.tarefaService.findOne(+id);
+    try {
+      return this.tarefaService.findOne(+id);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+    }
   }
 
   @Put(':id')
   update(@Param('id') id: string, @Body() updateTarefaDto: UpdateTarefaDto) {
-    return this.tarefaService.update(+id, updateTarefaDto);
+    try{
+
+      return this.tarefaService.update(+id, updateTarefaDto);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.tarefaService.remove(+id);
+    try{
+
+      return this.tarefaService.remove(+id);
+    }catch(error) {
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND)
+    }
   }
 }
