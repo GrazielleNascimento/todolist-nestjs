@@ -1,26 +1,72 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTarefaDto } from '../dto/create-tarefa.dto';
 import { UpdateTarefaDto } from '../dto/update-tarefa.dto';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Tarefa } from '../entities/tarefa.entity';
 
 @Injectable()
 export class TarefaService {
-  create(createTarefaDto: CreateTarefaDto) {
-    return 'This action adds a new tarefa';
+ 
+  constructor(
+    @InjectRepository(Tarefa)
+    private tarefaRepository : Repository<Tarefa>
+  ){}
+
+   async create(createTarefaDto: CreateTarefaDto): Promise<CreateTarefaDto> {
+    return this.tarefaRepository.save(createTarefaDto) ;
   }
 
-  findAll() {
-    return `This action returns all tarefa`;
+  async findAll(): Promise<CreateTarefaDto[] | string> {
+    let tarefasEncontradas = await this.tarefaRepository.find();
+
+    if(tarefasEncontradas.length === 0) {
+       return 'Nenhuma Tarefa foi encontrada!';
+    }
+    return tarefasEncontradas;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} tarefa`;
+
+  async  findOne(id: number) : Promise<CreateTarefaDto> {
+    
+    let tarefaEncontrada = await this.tarefaRepository.findOne({
+      where:{
+        id
+      }
+    })
+    if(!tarefaEncontrada) {
+      throw new NotFoundException(`Tarefa ${id} não encontrada!`);
+    }
+
+    return tarefaEncontrada;
   }
 
-  update(id: number, updateTarefaDto: UpdateTarefaDto) {
-    return `This action updates a #${id} tarefa`;
+  async update(id: number, updateTarefaDto: UpdateTarefaDto) : Promise<CreateTarefaDto>{
+     let tarefaEncontrada = await this.tarefaRepository.findOne({
+      where:{
+        id
+      }
+    })
+
+    if(!tarefaEncontrada) {
+      throw new NotFoundException(`Tarefa ${id} não encontrada!`);
+    }
+    this.tarefaRepository.merge(tarefaEncontrada, updateTarefaDto);
+    return this.tarefaRepository.save(tarefaEncontrada);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} tarefa`;
+  async remove(id: number) {
+    let tarefaEncontrada = await this.tarefaRepository.findOne({
+      where:{
+        id
+      }
+    })
+    if(!tarefaEncontrada) {
+      throw new NotFoundException(`Tarefa ${id} não encontrada!`);
+    }
+    
+    return await this.tarefaRepository.delete(id);
   }
+
+  
 }

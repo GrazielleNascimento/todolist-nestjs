@@ -1,9 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
 import { TarefaService } from '../service/tarefa.service';
 import { CreateTarefaDto } from '../dto/create-tarefa.dto';
 import { UpdateTarefaDto } from '../dto/update-tarefa.dto';
 
-@Controller('tarefa')
+@Controller('/tarefa')
 export class TarefaController {
   constructor(private readonly tarefaService: TarefaService) {}
 
@@ -22,7 +22,7 @@ export class TarefaController {
     return this.tarefaService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateTarefaDto: UpdateTarefaDto) {
     return this.tarefaService.update(+id, updateTarefaDto);
   }
