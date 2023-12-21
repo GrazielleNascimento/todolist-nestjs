@@ -12,7 +12,7 @@ import {
 import { TarefaService } from '../service/tarefa.service';
 import { CreateTarefaDto } from '../dto/create-tarefa.dto';
 import { UpdateTarefaDto } from '../dto/update-tarefa.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { IndexTarefaSwagger } from '../swagger/index-tarefa.swagger';
 import { CreateTarefaSwagger } from '../swagger/create-tarefa.swagger';
 import { ShowTarefaSwagger } from '../swagger/show-tarefa.swagger';
@@ -61,7 +61,8 @@ export class TarefaController {
   @ApiResponse({
     status: 200,
     description: 'Dados de uma tarefa retornado com sucesso',
-    type: ShowTarefaSwagger, isArray: true,
+    type: ShowTarefaSwagger,
+    isArray: true,
   })
   @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
   findOne(@Param('id') id: number) {
@@ -80,6 +81,18 @@ export class TarefaController {
     type: UpdateTarefaSwagger,
   })
   @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
+  @ApiBody({
+    type: UpdateTarefaDto,
+    examples: {
+      default: {
+        value: {
+          titulo: 'string',
+          descricao: 'string',
+          status: true,
+        },
+      },
+    },
+  })
   update(@Param('id') id: number, @Body() updateTarefaDto: UpdateTarefaDto) {
     try {
       return this.tarefaService.update(+id, updateTarefaDto);
@@ -90,7 +103,7 @@ export class TarefaController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Excluir Tarefa' })
-  @ApiResponse({ status: 204, description: 'Tarefa excluída com sucesso' })
+  @ApiResponse({ status: 200, description: 'Tarefa excluída com sucesso' })
   @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
   remove(@Param('id') id: number) {
     try {

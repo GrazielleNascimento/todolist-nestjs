@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsBoolean, IsString, MaxLength } from 'class-validator';
+import { IsNotEmpty, IsBoolean, IsString, MaxLength, IsOptional } from 'class-validator';
 
 export class CreateTarefaDto {
   @ApiProperty()
@@ -14,7 +14,9 @@ export class CreateTarefaDto {
   @MaxLength(500, { message: 'A descrição não pode ter mais de 500 caracteres' })
   descricao: string;
 
+
   @ApiPropertyOptional()
   @IsBoolean({ message: 'O status deve ser um valor booleano' })
-  status: boolean;
+  @IsOptional()
+  status?: boolean; // se for false = tarefa pendente,se for true = tarefa concluida
 }
