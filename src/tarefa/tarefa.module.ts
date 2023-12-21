@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TarefaService } from './service/tarefa.service';
 import { TarefaController } from './controller/tarefa.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Tarefa } from './entities/tarefa.entity';
+import { Tarefa } from './entities/tarefa-entity';
 
 @Module({
   controllers: [TarefaController],

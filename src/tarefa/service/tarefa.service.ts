@@ -3,7 +3,7 @@ import { CreateTarefaDto } from '../dto/create-tarefa.dto';
 import { UpdateTarefaDto } from '../dto/update-tarefa.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Tarefa } from '../entities/tarefa.entity';
+import { Tarefa } from '../entities/tarefa-entity';
 import { validate } from 'class-validator';
 
 @Injectable()
