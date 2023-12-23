@@ -8,6 +8,7 @@ import {
   Put,
   HttpException,
   HttpStatus,
+  BadGatewayException,
 } from '@nestjs/common';
 import { TarefaService } from '../service/tarefa.service';
 import { CreateTarefaDto } from '../dto/create-tarefa.dto';
@@ -17,6 +18,9 @@ import { IndexTarefaSwagger } from '../swagger/index-tarefa.swagger';
 import { CreateTarefaSwagger } from '../swagger/create-tarefa.swagger';
 import { ShowTarefaSwagger } from '../swagger/show-tarefa.swagger';
 import { UpdateTarefaSwagger } from '../swagger/update-tarefa.swagger';
+import { BadRequestSwagger } from 'src/helpers/swagger/bad-request.swagger';
+import { NotFoundSwagger } from 'src/helpers/swagger/not-found.swagger';
+import { BadRequestGetAllSwagger } from 'src/helpers/swagger/bad-request-getall.swagger';
 
 @Controller('/tarefa')
 @ApiTags('tarefas')
@@ -30,7 +34,11 @@ export class TarefaController {
     description: 'Nova tarefa criada com sucesso',
     type: CreateTarefaSwagger,
   })
-  @ApiResponse({ status: 400, description: 'Parâmetros da Tarefa inválidos' })
+  @ApiResponse({
+    status: 400,
+    description: 'Parâmetros da Tarefa inválidos',
+    type: BadRequestSwagger,
+  })
   create(@Body() createTarefaDto: CreateTarefaDto) {
     try {
       return this.tarefaService.create(createTarefaDto);
@@ -47,12 +55,12 @@ export class TarefaController {
     type: IndexTarefaSwagger,
     isArray: true,
   })
-  @ApiResponse({ status: 500, description: 'Erro interno do servidor' })
+  @ApiResponse({ status: 400, description:'Erro ao buscar tarefas' , type: BadRequestGetAllSwagger, })
   findAll() {
     try {
       return this.tarefaService.findAll();
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -62,9 +70,12 @@ export class TarefaController {
     status: 200,
     description: 'Dados de uma tarefa retornado com sucesso',
     type: ShowTarefaSwagger,
-    isArray: true,
   })
-  @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
+  @ApiResponse({
+    status: 404,
+    description: 'Tarefa não encontrada',
+    type: NotFoundSwagger,
+  })
   findOne(@Param('id') id: number) {
     try {
       return this.tarefaService.findOne(+id);
@@ -80,7 +91,16 @@ export class TarefaController {
     description: 'Tarefa atualizada com sucesso',
     type: UpdateTarefaSwagger,
   })
-  @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
+  @ApiResponse({
+    status: 400,
+    description: 'Parâmetros da Tarefa inválidos',
+    type: BadRequestSwagger,
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Tarefa não encontrada',
+    type: NotFoundSwagger,
+  })
   @ApiBody({
     type: UpdateTarefaDto,
     examples: {
@@ -104,7 +124,11 @@ export class TarefaController {
   @Delete(':id')
   @ApiOperation({ summary: 'Excluir Tarefa' })
   @ApiResponse({ status: 200, description: 'Tarefa excluída com sucesso' })
-  @ApiResponse({ status: 404, description: 'Tarefa não encontrada' })
+  @ApiResponse({
+    status: 404,
+    description: 'Tarefa não encontrada',
+    type: NotFoundSwagger,
+  })
   remove(@Param('id') id: number) {
     try {
       return this.tarefaService.remove(+id);

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, InternalServerErrorException } from '@nestjs/common';
 import { CreateTarefaDto } from '../dto/create-tarefa.dto';
 import { UpdateTarefaDto } from '../dto/update-tarefa.dto';
 import { Repository } from 'typeorm';
@@ -26,7 +26,7 @@ export class TarefaService {
       return await this.tarefaRepository.save(createTarefaDto) ;
       
     }catch(error){
-      throw new NotFoundException('Não foi possivel criar uma nova tarefa')
+      throw new BadRequestException('Não foi possivel criar uma nova tarefa')
     }
   }
 
@@ -38,7 +38,7 @@ export class TarefaService {
       return tarefasEncontradas;
 
     }catch(error){
-      throw new NotFoundException('Não foi possivel obter a lista de tarefas')
+      throw new BadRequestException('Não foi possivel obter a lista de tarefas')
     }
   }
 
@@ -57,7 +57,7 @@ export class TarefaService {
       return tarefaEncontrada;
 
     }catch(error){
-      throw new NotFoundException('Não foi possivel encontrar a tarefa')
+      throw new BadRequestException('Não foi possivel encontrar a tarefa')
     }
     
   }
@@ -84,7 +84,7 @@ export class TarefaService {
       this.tarefaRepository.merge(tarefaEncontrada, updateTarefaDto);
       return this.tarefaRepository.save(tarefaEncontrada);
     }catch(error){
-      throw new NotFoundException('Não foi possivel atualizar a tarefa')
+      throw new BadRequestException('Não foi possivel atualizar a tarefa')
     }
     
   }
@@ -103,7 +103,7 @@ export class TarefaService {
       
       return await this.tarefaRepository.delete(id);
     }catch(error){
-      throw new NotFoundException('Não foi possivel deletar a tarefa')
+      throw new BadRequestException('Não foi possivel deletar a tarefa')
     }
     
   }
