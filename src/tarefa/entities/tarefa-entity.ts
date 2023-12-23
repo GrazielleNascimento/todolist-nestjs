@@ -18,4 +18,11 @@ export class Tarefa {
   @Column({ default: false }) //inicia como false pois a tarefa não foi concluida
   @ApiProperty()
   status: boolean;
+
+  constructor (tarefa?: Partial<Tarefa>) {
+    this.id = tarefa?.id;
+    this.titulo = tarefa?.titulo;
+    this.descricao = tarefa?.descricao;
+    this.status = tarefa?.status;
+  }
 }
