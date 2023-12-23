@@ -15,8 +15,9 @@ export class CreateTarefaDto {
   descricao: string;
 
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ default: false })
   @IsBoolean({ message: 'O status deve ser um valor booleano' })
   @IsOptional()
   status?: boolean; // se for false = tarefa pendente,se for true = tarefa concluida
 }
+
