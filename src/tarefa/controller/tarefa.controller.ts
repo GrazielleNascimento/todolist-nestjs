@@ -18,9 +18,9 @@ import { IndexTarefaSwagger } from '../swagger/index-tarefa.swagger';
 import { CreateTarefaSwagger } from '../swagger/create-tarefa.swagger';
 import { ShowTarefaSwagger } from '../swagger/show-tarefa.swagger';
 import { UpdateTarefaSwagger } from '../swagger/update-tarefa.swagger';
-import { BadRequestSwagger } from 'src/helpers/swagger/bad-request.swagger';
-import { NotFoundSwagger } from 'src/helpers/swagger/not-found.swagger';
-import { BadRequestGetAllSwagger } from 'src/helpers/swagger/bad-request-getall.swagger';
+import { BadRequestSwagger } from '../../helpers/swagger/bad-request.swagger';
+import { NotFoundSwagger } from '../../helpers/swagger/not-found.swagger';
+import { BadRequestGetAllSwagger } from '../../helpers/swagger/bad-request-getall.swagger';
 
 @Controller('/tarefa')
 @ApiTags('tarefas')
