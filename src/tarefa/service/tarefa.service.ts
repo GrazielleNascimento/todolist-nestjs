@@ -103,13 +103,15 @@ export class TarefaService {
           id
         }
       })
-      if (!tarefaEncontrada) {
+
+      if (tarefaEncontrada) {
+        return await this.tarefaRepository.delete(id);
+      } else {
         throw new NotFoundException(`Tarefa ${id} não encontrada!`);
       }
 
-      return await this.tarefaRepository.delete(id);
     } catch (error) {
-      throw new BadRequestException('Não foi possivel deletar a tarefa')
+      throw new NotFoundException(`Tarefa ${id} não encontrada!`);
     }
 
   }
